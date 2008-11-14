@@ -20,7 +20,7 @@ class Brine
                                :top_margin    => 0,
                                :bottom_margin => 0 )
     @pdf.font CORE_FONT
-    @pdf.font_size!(FONT_SIZE)
+    @pdf.font.size = FONT_SIZE
  
     @slides = []
   end
@@ -32,7 +32,7 @@ class Brine
     @pdf.start_new_page unless @slides.empty?
     @pdf.font options[:font] || CORE_FONT
 
-    @pdf.font_size(options[:font_size] || FONT_SIZE) do
+    @pdf.font.size(options[:font_size] || FONT_SIZE) do
       centered_text(string)
     end
 
@@ -53,14 +53,14 @@ class Brine
   private 
 
   def text_height(slide)
-    metrics = @pdf.font_metrics
+    metrics = @pdf.font.metrics
     metrics.string_height(slide, :line_width => @pdf.bounds.width,
-                                 :font_size  => @pdf.current_font_size)
+                                 :font_size  => @pdf.font.size)
   end
 
   def text_width(slide)
-    metrics = @pdf.font_metrics
-    slide.lines.map { |e| metrics.string_width(e, @pdf.current_font_size) }.max
+    metrics = @pdf.font.metrics
+    slide.lines.map { |e| metrics.string_width(e, @pdf.font.size) }.max
   end
 
   def centered_text(s)
